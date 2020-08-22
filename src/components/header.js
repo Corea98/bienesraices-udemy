@@ -1,42 +1,44 @@
-import { Link } from "gatsby"
-import PropTypes from "prop-types"
-import React from "react"
+import React from 'react';
+import { Link, useStaticQuery, graphql } from 'gatsby';
+import { css } from '@emotion/core';
 
-const Header = ({ siteTitle }) => (
-  <header
-    style={{
-      background: `rebeccapurple`,
-      marginBottom: `1.45rem`,
-    }}
-  >
-    <div
-      style={{
-        margin: `0 auto`,
-        maxWidth: 960,
-        padding: `1.45rem 1.0875rem`,
-      }}
-    >
-      <h1 style={{ margin: 0 }}>
-        <Link
-          to="/"
-          style={{
-            color: `white`,
-            textDecoration: `none`,
-          }}
-        >
-          {siteTitle}
-        </Link>
-      </h1>
-    </div>
-  </header>
-)
+// Componentes
+import Navegacion from './navegacion';
 
-Header.propTypes = {
-  siteTitle: PropTypes.string,
+const Header = () => {
+
+    // Consultar logo.segmentActive
+    const { logo } = useStaticQuery(graphql`
+        query {
+            logo: file (relativePath: {eq: "logo.svg"}) {
+                id
+                publicURL
+            }
+        }
+    `);
+
+    return (
+        <header css={css`
+            background-color: #0d283b;
+            padding: 1rem;
+        `}>
+            <div className="contenedor" css={css`
+                text-align: center;
+
+                @media (min-width: 768px) {
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                }
+            `}>
+                <Link to="/">
+                    <img src={logo.publicURL} alt="Logotipo bienes raices" />
+                </Link>
+
+                <Navegacion />
+            </div>
+        </header>
+    );
 }
-
-Header.defaultProps = {
-  siteTitle: ``,
-}
-
-export default Header
+ 
+export default Header;
