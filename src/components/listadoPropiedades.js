@@ -5,26 +5,38 @@ import usePropiedades from '../hooks/usePropiedades';
 // Modulos
 import listadoPropiedadesCSS from '../css/listadoPropiedades.module.css';
 
+// Hooks
+import useFiltro from '../hooks/useFiltro';
+
 // Components
 import PropiedadPreview from '../components/propiedadPreview';
 
 const ListadoPropiedades = () => {
 
     const resultado = usePropiedades();
-    // console.log(propiedades);
-
-    // states
     const [ propiedades, setPropiedades ] = useState([]);
 
+    // Filtrado de propiedades
+    const { categoria, FiltroUI } = useFiltro();
+
     useEffect(() => {
-        setPropiedades(resultado);
-    }, []);
+        setPropiedades( 
+            categoria ?
+                resultado.filter(propiedad => (propiedad.categorias.nombre === categoria))
+            :
+                resultado
+        );
+
+        
+    }, [categoria]);
 
     return (
         <>
         <h2 css={css`
             margin-top: 5rem;
         `}>Nuestras propiedades</h2>
+
+        {FiltroUI()}
 
         <ul className={listadoPropiedadesCSS.propiedades}>
             {propiedades.map( propiedad => (
